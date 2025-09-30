@@ -1,8 +1,8 @@
 import datetime
 import requests
 import random
-# FIX: Change import to the full module path to avoid conflicts
-import google.generativeai as genai
+# FIX: Use the full import path for the new, unified GenAI SDK (google-genai)
+from google import genai 
 import tweepy
 import random
 import os
@@ -32,7 +32,7 @@ CONTENT_BASE_PATH = "content"
 # 2. DYNAMIC CONTENT SETUP & CONSTANTS
 # ==============================================================================
 
-# Get today's date (e.g., "2025-09-27")
+# Get today's date (e.g., "2025-09-30")
 TODAY_FOLDER = datetime.date.today().strftime("%Y-%m-%d")
 
 # Base URL for raw content on GitHub
@@ -61,9 +61,10 @@ def generate_gemini_article_text():
         return None
 
     try:
-        # Client initialization remains the same: genai.Client
-        client = genai.Client(api_key=GEMINI_API_KEY)
-
+        # client = genai.Client(api_key=GEMINI_API_KEY) # Original line - correct
+        # Note: The client should automatically pick up GEMINI_API_KEY from environment, but passing it explicitly is fine.
+        client = genai.Client() # Use this, assuming the GEMINI_API_KEY is in the environment as intended.
+        
         # FINAL OPTIMIZED PROMPT: Requests clear structure and explicitly forbids asterisk formatting.
         system_instruction = (
             "You are a savvy digital marketing expert. Generate a **long, detailed, and highly valuable** "
@@ -102,8 +103,8 @@ def generate_tweet_content(api_key: str):
         return None
 
     try:
-        # Initialize the Gemini Client by passing the API key directly
-        client = genai.Client(api_key=api_key)
+        # Initialize the Gemini Client. Assuming API key is in environment.
+        client = genai.Client()
 
         # System Instruction for the model
         system_instruction = (
