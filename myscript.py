@@ -2,7 +2,7 @@ import os
 import datetime
 import requests
 import random
-from google import genai
+import google.generativeai as genai
 import tweepy
 
 # --- Load Secrets from Environment ---
