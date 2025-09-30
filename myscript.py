@@ -60,7 +60,13 @@ def generate_gemini_article_text():
         return None
 
     try:
-        client = genai.Client(api_key=GEMINI_API_KEY)
+        genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+response = model.generate_content(
+    f"{system_instruction}\n\nGenerate today's real-world digital marketing tips and tricks article."
+)
+
 
         # FINAL OPTIMIZED PROMPT: Requests clear structure and explicitly forbids asterisk formatting.
         system_instruction = (
@@ -101,7 +107,14 @@ def generate_tweet_content(api_key: str):
 
     try:
         # Initialize the Gemini Client by passing the API key directly
-        client = genai.Client(api_key=api_key)
+        genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+response = model.generate_content(
+    f"{system_instruction}\n\n{prompt_text}",
+    generation_config={"temperature": 0.8}
+)
+
 
         # System Instruction for the model
         system_instruction = (
