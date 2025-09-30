@@ -1,9 +1,10 @@
-import os
 import datetime
 import requests
 import random
-import google.generativeai as genai
+from google import genai
 import tweepy
+import random
+import os
 
 # --- Load Secrets from Environment ---
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -26,7 +27,6 @@ CONTENT_BASE_PATH = "content"
 # --- NOTE ---
 # In a real environment, you must ensure all the required variables (like those in the block above)
 # are defined and hold actual values before this script runs.
-
 # ==============================================================================
 # 2. DYNAMIC CONTENT SETUP & CONSTANTS
 # ==============================================================================
@@ -60,13 +60,7 @@ def generate_gemini_article_text():
         return None
 
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
-
-response = model.generate_content(
-    f"{system_instruction}\n\nGenerate today's real-world digital marketing tips and tricks article."
-)
-
+        client = genai.Client(api_key=GEMINI_API_KEY)
 
         # FINAL OPTIMIZED PROMPT: Requests clear structure and explicitly forbids asterisk formatting.
         system_instruction = (
@@ -107,14 +101,7 @@ def generate_tweet_content(api_key: str):
 
     try:
         # Initialize the Gemini Client by passing the API key directly
-        genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
-
-response = model.generate_content(
-    f"{system_instruction}\n\n{prompt_text}",
-    generation_config={"temperature": 0.8}
-)
-
+        client = genai.Client(api_key=api_key)
 
         # System Instruction for the model
         system_instruction = (
@@ -324,7 +311,7 @@ def post_tweet(tweet_text):
         return
     
     # Check for X credentials
-    if not all([CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_SECRET]):
+    if not all([CONSUMER_KEY, CONSUMER_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET]):
          print("🛑 X API credentials missing. Aborting X post.")
          return
 
@@ -333,8 +320,8 @@ def post_tweet(tweet_text):
         client = tweepy.Client(
             consumer_key=CONSUMER_KEY,
             consumer_secret=CONSUMER_SECRET,
-            access_token=ACCESS_TOKEN,
-            access_token_secret=ACCESS_SECRET
+            access_token=X_ACCESS_TOKEN,
+            access_token_secret=X_ACCESS_SECRET
         )
         
         # Verify permissions are available for the user (optional but good for debugging)
@@ -455,3 +442,4 @@ if __name__ == "__main__":
     
     print("\n" + "=" * 60)
     print("✅ Full Automation Sequence Complete. (Attempted 4 posts across 3 platforms)")
+
