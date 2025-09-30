@@ -1,7 +1,8 @@
 import datetime
 import requests
 import random
-from google import genai
+# FIX: Change import to the full module path to avoid conflicts
+import google.generativeai as genai
 import tweepy
 import random
 import os
@@ -60,6 +61,7 @@ def generate_gemini_article_text():
         return None
 
     try:
+        # Client initialization remains the same: genai.Client
         client = genai.Client(api_key=GEMINI_API_KEY)
 
         # FINAL OPTIMIZED PROMPT: Requests clear structure and explicitly forbids asterisk formatting.
@@ -262,7 +264,7 @@ def post_gemini_article_to_linkedin():
         print("🛑 LinkedIn credentials missing. Aborting article post.")
         return
 
-    # >>> Gemini Content Generation <<<
+    # >>> Gemini Content Generation <<<<
     ARTICLE_TEXT = generate_gemini_article_text()
     if not ARTICLE_TEXT:
         print("🛑 Article content generation failed. Aborting article post.")
@@ -442,4 +444,3 @@ if __name__ == "__main__":
     
     print("\n" + "=" * 60)
     print("✅ Full Automation Sequence Complete. (Attempted 4 posts across 3 platforms)")
-
