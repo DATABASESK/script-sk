@@ -1,0 +1,5 @@
+flask
+requests
+tweepy
+google-generativeai
+gunicorn
