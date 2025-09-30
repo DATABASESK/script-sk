@@ -1,6 +1,5 @@
 flask
 requests
 tweepy
-google-generativeai
+google-genai
 gunicorn
-google
